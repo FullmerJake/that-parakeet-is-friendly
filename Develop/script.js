@@ -88,12 +88,33 @@ function generatePassword(lower, upper, number, symbol, length) {
 
   const typesCount = lower + upper + number + symbol;
 
-  console.log('types count: ', typesCount);
+  // console.log('types count: ', typesCount);
 
   // creates an array of objects, using the keys from above
-  const typesArr = [{lower}, {upper}, {number}, {symbol}];
+  // .filter filters out the boxes that have been unchecked out of the array. (anything that returns false is filtered out)
+  const typesArr = [{ lower }, { upper }, { number }, { symbol }].filter(item => Object.values(item)[0]);
 
-  console.log('typesArr: ', typesArr);
+   // console.log('typesArr: ', typesArr);
+
+  if(typesCount == 0){
+    return '';
+  }
+
+  // cycles through the array made after checking box criteria, and lists each type.
+  // increments by typeCount
+  for(let i = 0; i < length; i+= typesCount) {
+    typesArr.forEach(type => {
+      const funcName = Object.keys(type)[0];
+     //  console.log('funcName: ', funcName);
+
+      generatePassword += randomFunc[funcName]();
+
+    })
+
+  }
+
+  const finalPassword = (generatePassword.slice(0, (length + 1)));
+  return finalPassword;
 
 }
 
@@ -113,7 +134,7 @@ function getRandomUpper() {
 
 function getRandomNumber() {
   // see above
-  return String.getCharCode(Math.floor(Math.random * 10) + 48);
+  return String.fromCharCode(Math.floor(Math.random * 10) + 48);
 }
 
 function getRandomSymbol() {
@@ -124,3 +145,7 @@ function getRandomSymbol() {
 }
 
 
+//what are keys
+//what is const
+//look at some of the event functions and learn what those things inside are. 
+//understand the different function methods used you are unfamiliar with. 
