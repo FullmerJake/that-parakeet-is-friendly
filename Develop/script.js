@@ -1,25 +1,70 @@
+
+
+//Psuedocode
+// 2. When prompted, I can select which criteria to include in the password
+// 3. When prompted for length, I can choose between 8-128 characters (no less than 8, or more than 128)
+// 4. When prompted for character type, I choose lowercase, uppercase, numeric, and/or special characters
+// 5. When I answer prompt, input should be validated and at least 1 character type selected.
+// 6. When all prompts answered, paddword is generated that matches criteria
+// 7. Final password is displayed in an alert or written to the page. 
+
+
+
+//creates arrays that contain the codes for the different alphanumeric symbols to call in later functions. 
+const results = document.querySelector("#result");
+const charNum = [48, 57];
+const charUpper = [65, 90];
+const charLower = [97, 122];
+const charSymbol = [33, 47];
+
 // Assignment code here
+ function generatePassword() {
+   //creates variables that determine whether or not the html box element is checked or not, as well as the desired length. 
+  const length = document.querySelector("#length").value;
+  const upper = document.querySelector("#uppercase").checked;
+  const lower = document.querySelector("#lowercase").checked;
+  const numbers = document.querySelector("#numbers").checked;
+  const symbols = document.querySelector("#symbols").checked;
 
- /* function generatePassword(lower, upper, number, symbol, length) {
-  //1. initialize password variable
-  //2. Filter out unchecked types
-  //3. Loop over length, call generator function for each type
-  //4. add final password to the password variable and return. 
+  //creates 2 empty arrays
+  const randSelector = [];
+  const password = [];
 
-  let generatePassword = '';
 
-  const typesCount = lower + upper + number + symbol;
+  // each of these take the variables from above, and determine if they are true or not (checked or not)
+  // if they are true, runs the for loop to get random numbers that corrospond to the CharCode chart for the different alphanumeric symbols. 
+  //it then pushes that code to the randSelector array and slowly build upon itself.
+  if (upper === true) {
+      for (let i = charUpper[0]; i <= charUpper[1]; i++) {
+          randSelector.push(i);
+      }
 
-  console.log('types count: ', typesCount);
+  }
+  if (numbers === true) {
+      for (let i = charNum[0]; i <= charNum[1]; i++) {
+          randSelector.push(i);
+      }
 
-  const typesArr = [lower, upper, number, symbol];
+  }
+  if (symbols === true) {
+      for (let i = charSymbol[0]; i <= charSymbol[1]; i++) {
+          randSelector.push(i);
+      }
+  }
+  if (lower === true) {
+      for (let i = charLower[0]; i <= charLower[1]; i++) {
+          randSelector.push(i);
+      }
+  }
 
-  console.log('typesArr: ', typesArr);
+  //translates the randSelector array and pushes it into the empty password array, taking into account the length set. 
+  for (let i = 0; i < length; i++) {
+      password.push(String.fromCharCode(randSelector[Math.floor(Math.random() * randSelector.length)]))
+  }
+
+  //enters the password array into the results variable for transfer to the user. 
+  results.textContent = password.join("");
 }
-
-
-// Get references to the #generate element
-var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
@@ -31,121 +76,4 @@ function writePassword() {
 }
 
 // Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
-
-
-//Psuedocode
-// 1. Present user with a series of prompts, allowing to customize password
-// 2. When prompted, I can select which criteria to include in the password
-// 3. When prompted for length, I can choose between 8-128 characters (no less than 8, or more than 128)
-// 4. When prompted for character type, I choose lowercase, uppercase, numeric, and/or special characters
-// 5. When I answer prompt, input should be validated and at least 1 character type selected.
-// 6. When all prompts answered, paddword is generated that matches criteria
-// 7. Final password is displayed in an alert or written to the page. 
- 
-*/
-
-// DOM elements
-const resultEL = document.getElementById('result');
-const lengthEL = document.getElementById('length');
-const uppercaseEL = document.getElementById('uppercase');
-const lowercaseEL = document.getElementById('lowercase');
-const numbersEL = document.getElementById('numbers');
-const symbolsEL = document.getElementById('symbols');
-const generateEL = document.getElementById('generate');
-const clipboardEL = document.getElementById('clipboard');
-
-
-// turns the generator functions into objects
-const randomFunc = {
-  // keys
-  lower: getRandomLower,
-  upper: getRandomUpper,
-  number: getRandomNumber,
-  symbol: getRandomSymbol
-};
-
-// Generate event listen
-generateEL.addEventListener('click', () => {
-  //  length to a number instead of string
-  const length = +lengthEL.value;
-  // checks to see if boxes are checked
-  const hasLower = lowercaseEL.checked;
-  const hasUpper = uppercaseEL.checked;
-  const hasNumber = numbersEL.checked;
-  const hasSymbol = symbolsEL.checked;
-  resultEL.innerText = generatePassword(hasLower, hasUpper, hasNumber, hasSymbol, length);
-});
-
-// Generate password function
-function generatePassword(lower, upper, number, symbol, length) {
-  //1. initialize password variable
-  //2. Filter out unchecked types
-  //3. Loop over length, call generator function for each type
-  //4. add final password to the password variable and return. 
-
-  let generatePassword = '';
-
-  const typesCount = lower + upper + number + symbol;
-
-  // console.log('types count: ', typesCount);
-
-  // creates an array of objects, using the keys from above
-  // .filter filters out the boxes that have been unchecked out of the array. (anything that returns false is filtered out)
-  const typesArr = [{ lower }, { upper }, { number }, { symbol }].filter(item => Object.values(item)[0]);
-
-   // console.log('typesArr: ', typesArr);
-
-  if(typesCount == 0){
-    return '';
-  }
-
-  // cycles through the array made after checking box criteria, and lists each type.
-  // increments by typeCount
-  for(let i = 0; i < length; i+= typesCount) {
-    typesArr.forEach(type => {
-      const funcName = Object.keys(type)[0];
-     //  console.log('funcName: ', funcName);
-
-      generatePassword += randomFunc[funcName]();
-
-    })
-
-  }
-
-  const finalPassword = (generatePassword.slice(0, (length + 1)));
-  return finalPassword;
-
-}
-
-
-//Generator functions
-
-function getRandomLower() {
-  //generates a random number between 97-122, which corrosponds to each code for lowercase alphabet
-  //String.fromCharCode uses CharCode to "look up" the coorisponding letter/symbol/case
-  return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
-}
-
-function getRandomUpper() {
-  // see above for how function works. 
-  return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
-}
-
-function getRandomNumber() {
-  // see above
-  return String.fromCharCode(Math.floor(Math.random * 10) + 48);
-}
-
-function getRandomSymbol() {
-  //creates a variable and stores symbols as strings on the american keyboard
-  const symbols = '!@#$%^&*()[]{}<>/?;:",.+-_=';
-  //returns a random value from the symbol variable
-  return symbols[Math.floor(Math.random() * symbols.length)];
-}
-
-
-//what are keys
-//what is const
-//look at some of the event functions and learn what those things inside are. 
-//understand the different function methods used you are unfamiliar with. 
+document.querySelector('#generate').addEventListener("click", writePassword);
