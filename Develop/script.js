@@ -8,6 +8,12 @@ const charSymbol = [33, 47];
 
 // Assignment code here
  function generatePassword() {
+
+
+ /* some of the following code was copied from a developer named Justin Raj. I have included changes of my own to adapt to my personal project
+  as well as better reflect the requirements of this particular projet */
+
+
    //creates variables that determine whether or not the html box element is checked or not, as well as the desired length. 
   const length = document.querySelector("#length").value;
   const upper = document.querySelector("#uppercase").checked;
