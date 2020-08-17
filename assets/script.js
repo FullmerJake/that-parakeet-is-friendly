@@ -62,8 +62,10 @@ const charSymbol = [33, 47];
     //enters the password array into the results variable for transfer to the user. 
     results.textContent = password.join("");
     }
-
-  else if(length < 8 || length > 120) {
+if(upper === false && lower === false && symbols === false && numbers === false) {
+    alert('Please choose a valid length between 8 and 120 characters, and check at least 1 box.');
+}
+else if(length < 8 || length > 120) {
     alert('Please choose a valid length between 8 and 120 characters, and check at least 1 box.');
   }
  
@@ -72,9 +74,9 @@ const charSymbol = [33, 47];
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
-  var passwordText = document.querySelector("#password");
+  var passwordText = document.querySelector("#results");
 
-  passwordText.value = password;
+  passwordText = password;
 
 }
 
